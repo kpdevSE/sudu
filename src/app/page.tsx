@@ -22,7 +22,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen bg-white text-stone-900 overflow-x-hidden selection:bg-rose-400 selection:text-white">
+    <main className="relative min-h-screen bg-white text-stone-900 overflow-x-hidden selection:bg-rose-400 selection:text-white pb-24 sm:pb-28">
       {/* Surprise Opening Overlay (Light Theme) that Launches Confetti & Starts Birthday Chime */}
       <SurpriseModal onOpen={handleSurpriseOpen} />
 

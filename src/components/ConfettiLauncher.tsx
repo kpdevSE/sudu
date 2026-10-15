@@ -3,9 +3,9 @@
 import confetti from "canvas-confetti";
 
 export const launchFireworkConfetti = () => {
-  const duration = 3.5 * 1000;
+  const duration = 2.5 * 1000;
   const animationEnd = Date.now() + duration;
-  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+  const defaults = { startVelocity: 25, spread: 360, ticks: 60, zIndex: 1000 };
 
   const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
 
@@ -16,64 +16,64 @@ export const launchFireworkConfetti = () => {
       return clearInterval(interval);
     }
 
-    const particleCount = 50 * (timeLeft / duration);
+    const particleCount = 28 * (timeLeft / duration);
 
-    // since particles fall down, start a bit higher than random
+    // Warm celebratory colors (NO PURE WHITE so no white boxes appear over text on white background!)
     confetti({
       ...defaults,
       particleCount,
-      origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-      colors: ["#ff2a85", "#f59e0b", "#06b6d4", "#a855f7", "#ffffff"],
+      origin: { x: randomInRange(0.15, 0.35), y: Math.random() * 0.4 },
+      colors: ["#f43f5e", "#f59e0b", "#ec4899", "#d97706", "#fb7185"],
     });
     confetti({
       ...defaults,
       particleCount,
-      origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-      colors: ["#fb7185", "#f43f5e", "#ffd700", "#38bdf8", "#c084fc"],
+      origin: { x: randomInRange(0.65, 0.85), y: Math.random() * 0.4 },
+      colors: ["#fb7185", "#f43f5e", "#f59e0b", "#e11d48", "#fbb03b"],
     });
-  }, 250);
+  }, 280);
 };
 
 export const launchHeartConfetti = () => {
-  const scalar = 2;
+  const scalar = 1.8;
   const heart = confetti.shapeFromText({ text: "💖", scalar });
   const star = confetti.shapeFromText({ text: "✨", scalar });
 
   confetti({
     shapes: [heart, star],
     scalar,
-    particleCount: 40,
-    spread: 100,
-    origin: { y: 0.6 },
-    ticks: 120,
+    particleCount: 25,
+    spread: 80,
+    origin: { y: 0.65 },
+    ticks: 100,
     zIndex: 1000,
   });
 };
 
 export const launchRainbowRibbons = () => {
   confetti({
-    particleCount: 100,
-    spread: 160,
+    particleCount: 60,
+    spread: 140,
     origin: { y: 0.7 },
-    colors: ["#ff007f", "#7928ca", "#00dfd8", "#ff0080", "#f5a623"],
+    colors: ["#f43f5e", "#f59e0b", "#ec4899", "#d97706", "#be123c"],
     zIndex: 1000,
   });
 };
 
 export const launchSunflowerAndRoseConfetti = () => {
-  const scalar = 2.4;
+  const scalar = 2.0;
   const sunflower = confetti.shapeFromText({ text: "🌻", scalar });
   const rose = confetti.shapeFromText({ text: "🌹", scalar });
-  const sparkle = confetti.shapeFromText({ text: "✨", scalar: 1.8 });
+  const sparkle = confetti.shapeFromText({ text: "✨", scalar: 1.5 });
 
   // Left burst
   confetti({
     shapes: [sunflower, rose, sparkle],
     scalar,
-    particleCount: 35,
-    spread: 100,
-    origin: { x: 0.25, y: 0.55 },
-    ticks: 140,
+    particleCount: 22,
+    spread: 90,
+    origin: { x: 0.3, y: 0.6 },
+    ticks: 120,
     zIndex: 1000,
   });
 
@@ -81,10 +81,10 @@ export const launchSunflowerAndRoseConfetti = () => {
   confetti({
     shapes: [sunflower, rose, sparkle],
     scalar,
-    particleCount: 35,
-    spread: 100,
-    origin: { x: 0.75, y: 0.55 },
-    ticks: 140,
+    particleCount: 22,
+    spread: 90,
+    origin: { x: 0.7, y: 0.6 },
+    ticks: 120,
     zIndex: 1000,
   });
 };

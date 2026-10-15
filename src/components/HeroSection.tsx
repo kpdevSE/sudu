@@ -70,7 +70,7 @@ export default function HeroSection() {
     <header
       id="hero"
       aria-label="Birthday Hero Celebration"
-      className="relative min-h-[95vh] sm:min-h-screen flex flex-col items-center justify-center pt-20 sm:pt-24 pb-14 sm:pb-20 px-3 sm:px-6 overflow-hidden bg-gradient-to-b from-white via-[#fffdf9] to-[#fff5f8]"
+      className="relative min-h-[92vh] sm:min-h-screen flex flex-col items-center justify-center pt-16 sm:pt-24 pb-20 sm:pb-24 px-3 sm:px-6 overflow-hidden bg-gradient-to-b from-white via-[#fffdf9] to-[#fff5f8]"
     >
       {/* Luminous Light Background with Sunflower & Rose Garden Ambience */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
