@@ -22,7 +22,7 @@ const greatVibes = Great_Vibes({
 });
 
 export const metadata: Metadata = {
-  title: "Happy Birthday Sudu! 💖 | A Supreme Birthday Celebration",
+  title: "Happy Birthday Sudu! 💖 | A Special Celebration",
   description:
     "A magical, vibrant, and deeply heartfelt birthday surprise celebration filled with memories, family wishes, and endless love.",
   keywords: ["Birthday", "Celebration", "Surprise", "Love", "Memories"],
@@ -38,7 +38,7 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${montserrat.variable} ${greatVibes.variable} scroll-smooth`}
     >
-      <body className="font-sans bg-[#080711] text-zinc-100 antialiased overflow-x-hidden selection:bg-pink-500 selection:text-white">
+      <body className="font-sans bg-white text-stone-900 antialiased overflow-x-hidden selection:bg-rose-400 selection:text-white">
         {children}
       </body>
     </html>

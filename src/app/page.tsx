@@ -1,6 +1,9 @@
-import React from "react";
+"use client";
+
+import React, { useRef } from "react";
 import ScrollProgressBar from "@/components/ScrollProgressBar";
-import AudioPlayer from "@/components/AudioPlayer";
+import AudioPlayer, { AudioPlayerHandle } from "@/components/AudioPlayer";
+import SurpriseModal from "@/components/SurpriseModal";
 import FloatingNav from "@/components/FloatingNav";
 import HeroSection from "@/components/HeroSection";
 import BoyfriendWishSection from "@/components/BoyfriendWishSection";
@@ -11,36 +14,46 @@ import WishbookSection from "@/components/WishbookSection";
 import FooterSection from "@/components/FooterSection";
 
 export default function Home() {
+  const audioPlayerRef = useRef<AudioPlayerHandle>(null);
+
+  const handleSurpriseOpen = () => {
+    // Triggers music play on user tap / modal reveal directly inside the user click gesture
+    audioPlayerRef.current?.startAudio();
+  };
+
   return (
-    <main className="relative min-h-screen bg-[#070611] text-zinc-100 overflow-x-hidden selection:bg-pink-500 selection:text-white">
+    <main className="relative min-h-screen bg-white text-stone-900 overflow-x-hidden selection:bg-rose-400 selection:text-white">
+      {/* Surprise Opening Overlay (Light Theme) that Launches Confetti & Starts Birthday Chime */}
+      <SurpriseModal onOpen={handleSurpriseOpen} />
+
       {/* Top Scroll Progress Indicator */}
       <ScrollProgressBar />
 
-      {/* Floating Ambient Music Chime Synthesizer */}
-      <AudioPlayer />
+      {/* Ambient Birthday Song Synthesizer & Controller */}
+      <AudioPlayer ref={audioPlayerRef} autoStart={false} />
 
-      {/* Floating Navigation Dock */}
+      {/* Floating Mobile-Responsive Navigation Dock */}
       <FloatingNav />
 
-      {/* Main / Hero Section */}
+      {/* Main / Hero Celebration Section with Sunflower & Rose Garden */}
       <HeroSection />
 
-      {/* My Wish (Boyfriend's Wish) Section */}
+      {/* Boyfriend's Heartfelt Wish & Polaroid Memory */}
       <BoyfriendWishSection />
 
-      {/* Dad's Wish Section */}
+      {/* Dad's Wish Section (Interactive 3D Flip Card + Catholic Blessing) */}
       <DadWishSection />
 
-      {/* Grandmother & Grandfather's Wishes Section */}
+      {/* Grandmother & Grandfather's Wishes Section (Opposite Slide-In + Catholic Prayers) */}
       <GrandparentsWishSection />
 
-      {/* Interactive Photo Gallery Section */}
+      {/* Interactive Photo Gallery Section (Masonry + Lightbox) */}
       <PhotoGallerySection />
 
       {/* Interactive Wishbook & Guest Wall */}
       <WishbookSection />
 
-      {/* Romantic Finale Footer */}
+      {/* Finale Footer with Sunflower & Rose Blessing */}
       <FooterSection />
     </main>
   );

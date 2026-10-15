@@ -59,3 +59,32 @@ export const launchRainbowRibbons = () => {
     zIndex: 1000,
   });
 };
+
+export const launchSunflowerAndRoseConfetti = () => {
+  const scalar = 2.4;
+  const sunflower = confetti.shapeFromText({ text: "🌻", scalar });
+  const rose = confetti.shapeFromText({ text: "🌹", scalar });
+  const sparkle = confetti.shapeFromText({ text: "✨", scalar: 1.8 });
+
+  // Left burst
+  confetti({
+    shapes: [sunflower, rose, sparkle],
+    scalar,
+    particleCount: 35,
+    spread: 100,
+    origin: { x: 0.25, y: 0.55 },
+    ticks: 140,
+    zIndex: 1000,
+  });
+
+  // Right burst
+  confetti({
+    shapes: [sunflower, rose, sparkle],
+    scalar,
+    particleCount: 35,
+    spread: 100,
+    origin: { x: 0.75, y: 0.55 },
+    ticks: 140,
+    zIndex: 1000,
+  });
+};

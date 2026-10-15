@@ -3,26 +3,17 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Sparkles, Heart, Crown, Gift, Calendar, ArrowDown, Edit3, Check } from "lucide-react";
-import { launchFireworkConfetti, launchHeartConfetti } from "./ConfettiLauncher";
-
-interface CountdownTime {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
+import { Sparkles, Heart, Gift, ArrowDown, Edit3, Check } from "lucide-react";
+import {
+  launchFireworkConfetti,
+  launchHeartConfetti,
+  launchSunflowerAndRoseConfetti,
+} from "./ConfettiLauncher";
 
 export default function HeroSection() {
   const [gfName, setGfName] = useState("SUDU");
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState("SUDU");
-  const [countdown, setCountdown] = useState<CountdownTime>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
 
   // Load custom name if stored in localStorage
   useEffect(() => {
@@ -32,8 +23,7 @@ export default function HeroSection() {
       setTempName(saved);
     }
 
-    // Auto-launch celebratory effect when hero mounts
-    launchFireworkConfetti();
+    launchSunflowerAndRoseConfetti();
     const timer = setTimeout(() => {
       launchHeartConfetti();
     }, 1200);
@@ -46,139 +36,163 @@ export default function HeroSection() {
     setGfName(trimmed.toUpperCase());
     setIsEditingName(false);
     localStorage.setItem("birthday_gf_name", trimmed.toUpperCase());
-    launchHeartConfetti();
+    launchSunflowerAndRoseConfetti();
   };
 
-  // Dynamic countdown timer
-  useEffect(() => {
-    const currentYear = new Date().getFullYear();
-    let target = new Date(currentYear, new Date().getMonth(), new Date().getDate() + 1, 0, 0, 0);
-
-    const updateTimer = () => {
-      const now = new Date().getTime();
-      const difference = target.getTime() - now;
-
-      if (difference <= 0) {
-        target = new Date(currentYear, new Date().getMonth(), new Date().getDate() + 1, 0, 0, 0);
-      }
-
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-      setCountdown({ days, hours, minutes, seconds });
-    };
-
-    updateTimer();
-    const interval = setInterval(updateTimer, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  // Rich field of Sunflower 🌻 and Rose 🌹 emojis drifting in the background
+  const backgroundFlowers = [
+    // Top-left cluster
+    { emoji: "🌻", size: "text-3xl sm:text-4xl md:text-5xl", x: "6vw", y: "12vh", duration: 8, delay: 0 },
+    { emoji: "🌹", size: "text-2xl sm:text-3xl md:text-4xl", x: "18vw", y: "24vh", duration: 10, delay: 1 },
+    { emoji: "🌻", size: "text-xl sm:text-2xl md:text-3xl", x: "28vw", y: "10vh", duration: 7.5, delay: 2 },
+    // Top-right cluster
+    { emoji: "🌹", size: "text-3xl sm:text-4xl md:text-5xl", x: "78vw", y: "14vh", duration: 9, delay: 0.5 },
+    { emoji: "🌻", size: "text-2xl sm:text-3xl md:text-4xl", x: "88vw", y: "22vh", duration: 11, delay: 1.5 },
+    { emoji: "🌹", size: "text-xl sm:text-2xl md:text-3xl", x: "68vw", y: "8vh", duration: 8, delay: 2.5 },
+    // Mid-left cluster
+    { emoji: "🌹", size: "text-3xl sm:text-4xl md:text-5xl", x: "4vw", y: "45vh", duration: 9.5, delay: 0.8 },
+    { emoji: "🌻", size: "text-2xl sm:text-3xl md:text-4xl", x: "15vw", y: "58vh", duration: 11.5, delay: 1.8 },
+    // Mid-right cluster
+    { emoji: "🌻", size: "text-3xl sm:text-4xl md:text-5xl", x: "86vw", y: "48vh", duration: 10, delay: 1.2 },
+    { emoji: "🌹", size: "text-2xl sm:text-3xl md:text-4xl", x: "74vw", y: "62vh", duration: 8.5, delay: 2.2 },
+    // Bottom-left cluster
+    { emoji: "🌻", size: "text-4xl sm:text-5xl md:text-6xl", x: "8vw", y: "78vh", duration: 11, delay: 0.4 },
+    { emoji: "🌹", size: "text-2xl sm:text-3xl md:text-4xl", x: "22vw", y: "85vh", duration: 9, delay: 1.6 },
+    // Bottom-right cluster
+    { emoji: "🌹", size: "text-4xl sm:text-5xl md:text-6xl", x: "84vw", y: "82vh", duration: 10.5, delay: 0.7 },
+    { emoji: "🌻", size: "text-3xl sm:text-4xl md:text-5xl", x: "64vw", y: "86vh", duration: 8, delay: 2.1 },
+    // Center ambient accents
+    { emoji: "🌻", size: "text-xl sm:text-2xl", x: "34vw", y: "74vh", duration: 9.2, delay: 1.4 },
+    { emoji: "🌹", size: "text-xl sm:text-2xl", x: "48vw", y: "90vh", duration: 8.8, delay: 2.6 },
+  ];
 
   return (
     <header
       id="hero"
       aria-label="Birthday Hero Celebration"
-      className="relative min-h-[92vh] sm:min-h-screen flex flex-col items-center justify-center pt-20 sm:pt-24 pb-14 sm:pb-16 px-3 sm:px-6 overflow-hidden"
+      className="relative min-h-[95vh] sm:min-h-screen flex flex-col items-center justify-center pt-20 sm:pt-24 pb-14 sm:pb-20 px-3 sm:px-6 overflow-hidden bg-gradient-to-b from-white via-[#fffdf9] to-[#fff5f8]"
     >
-      {/* Dynamic Animated Background Patterns & Gradient Orbs */}
+      {/* Luminous Light Background with Sunflower & Rose Garden Ambience */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute top-1/4 -left-16 sm:-left-20 w-72 sm:w-96 h-72 sm:h-96 bg-pink-600/30 rounded-full blur-[100px] sm:blur-[120px] animate-pulse-glow" />
-        <div className="absolute top-1/3 -right-16 sm:-right-20 w-80 sm:w-[30rem] h-80 sm:h-[30rem] bg-indigo-600/25 rounded-full blur-[110px] sm:blur-[140px] animate-float" />
-        <div className="absolute bottom-10 left-1/3 w-64 sm:w-80 h-64 sm:h-80 bg-amber-500/20 rounded-full blur-[90px] animate-float-reverse" />
-        <div className="absolute top-10 right-1/4 w-60 sm:w-72 h-60 sm:h-72 bg-teal-500/25 rounded-full blur-[100px] animate-pulse" />
+        {/* Soft Sunlit Honey & Rose Radiance Orbs */}
+        <div className="absolute top-1/4 -left-20 w-80 sm:w-[34rem] h-80 sm:h-[34rem] bg-amber-200/40 rounded-full blur-[100px] sm:blur-[130px] animate-pulse-glow" />
+        <div className="absolute top-1/3 -right-20 w-80 sm:w-[34rem] h-80 sm:h-[34rem] bg-rose-200/40 rounded-full blur-[100px] sm:blur-[130px] animate-float" />
+        <div className="absolute bottom-10 left-1/3 w-80 sm:w-[28rem] h-80 sm:h-[28rem] bg-yellow-100/60 rounded-full blur-[90px] animate-float-reverse" />
+        <div className="absolute top-10 right-1/4 w-72 sm:w-88 h-72 sm:h-88 bg-pink-100/50 rounded-full blur-[90px]" />
 
-        {/* Animated Stardust Grid */}
+        {/* Delicate Golden Polka Dot Matrix */}
         <div
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-[0.08]"
           style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.2) 1px, transparent 0)`,
-            backgroundSize: "32px 32px",
+            backgroundImage: `radial-gradient(circle at 1px 1px, #d97706 1px, transparent 0)`,
+            backgroundSize: "28px 28px",
           }}
         />
 
-        {/* Floating Confetti / Heart / Sparkle Particles */}
-        {[...Array(12)].map((_, i) => (
+        {/* Dynamic Sunflowers 🌻 and Roses 🌹 Drifting in the Background */}
+        {backgroundFlowers.map((flower, idx) => (
           <motion.div
-            key={i}
-            className="absolute text-pink-400/40 text-xs sm:text-sm select-none"
-            initial={{
-              x: `${(i * 8) % 100}vw`,
-              y: `${(i * 12) % 100}vh`,
-              scale: 0.6 + (i % 3) * 0.4,
-              opacity: 0.2 + (i % 4) * 0.2,
-            }}
+            key={idx}
+            className={`absolute ${flower.size} select-none drop-shadow-md opacity-85 hover:opacity-100 cursor-pointer transition-opacity`}
+            style={{ left: flower.x, top: flower.y }}
             animate={{
-              y: ["0vh", "-12vh", "0vh"],
-              x: ["0vw", `${i % 2 === 0 ? 2 : -2}vw`, "0vw"],
-              rotate: [0, 180, 360],
+              y: ["0px", "-26px", "0px"],
+              x: ["0px", idx % 2 === 0 ? "16px" : "-16px", "0px"],
+              rotate: [0, idx % 2 === 0 ? 20 : -20, 0],
+              scale: [1, 1.08, 1],
             }}
             transition={{
-              duration: 7 + (i % 5) * 2,
+              duration: flower.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.3,
+              delay: flower.delay,
+            }}
+            whileHover={{ scale: 1.35, rotate: 25 }}
+          >
+            {flower.emoji}
+          </motion.div>
+        ))}
+
+        {/* Sparkling Gold Stardust */}
+        {[...Array(10)].map((_, i) => (
+          <motion.div
+            key={`sparkle-${i}`}
+            className="absolute text-amber-500/60 text-xs sm:text-sm select-none"
+            style={{
+              left: `${(i * 10 + 7) % 94}vw`,
+              top: `${(i * 12 + 8) % 88}vh`,
+            }}
+            animate={{
+              scale: [0.7, 1.4, 0.7],
+              opacity: [0.2, 0.9, 0.2],
+            }}
+            transition={{
+              duration: 3.5 + (i % 3),
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.4,
             }}
           >
-            {i % 4 === 0 ? "✨" : i % 4 === 1 ? "💖" : i % 4 === 2 ? "✝️" : "⭐"}
+            ✨
           </motion.div>
         ))}
       </div>
 
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center relative z-10 w-full">
-        {/* Catholic Blessing Badge */}
+        {/* Catholic Blessing Badge with Sunflower & Rose Motif */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full glass-panel border border-amber-400/40 text-amber-300 text-[11px] sm:text-xs md:text-sm font-semibold mb-5 shadow-lg shadow-amber-500/10"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel-gold border border-amber-300 text-amber-950 text-[11px] sm:text-xs md:text-sm font-semibold mb-5 shadow-sm"
         >
+          <span className="text-sm">🌻</span>
           <span className="text-sm">✝️</span>
-          <span className="tracking-wider uppercase">God&apos;s Beloved Daughter • Blessed by Grace</span>
-          <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+          <span className="tracking-wider uppercase">God&apos;s Beloved Daughter • Blessed Under Mother Mary&apos;s Mantle</span>
+          <span className="text-sm">🌹</span>
         </motion.div>
 
         {/* Main Title: HAPPY BIRTHDAY [GF'S NAME]! 💖 */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.2 }}
           className="relative group mb-3 w-full"
         >
-          <h1 className="font-display text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight px-1">
-            <span className="block text-zinc-100 drop-shadow-sm text-2xl sm:text-4xl md:text-6xl mb-1">
+          <h1 className="font-display text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-tight px-1 text-stone-900">
+            <span className="block text-stone-800 text-2xl sm:text-4xl md:text-6xl mb-1 drop-shadow-xs">
               HAPPY BIRTHDAY
             </span>
-            <span className="text-gradient-rainbow drop-shadow-lg inline-flex items-center gap-2 sm:gap-3 flex-wrap justify-center">
+            <span className="text-gradient-rainbow inline-flex items-center gap-2 sm:gap-3 flex-wrap justify-center drop-shadow-xs">
               {gfName}! <span className="animate-pulse">💖</span>
             </span>
           </h1>
 
           {/* Inline Edit Name Button */}
-          <div className="mt-2 flex items-center justify-center gap-2">
+          <div className="mt-2.5 flex items-center justify-center gap-2">
             {!isEditingName ? (
               <button
                 onClick={() => setIsEditingName(true)}
-                className="text-[10px] sm:text-[11px] text-zinc-400 hover:text-pink-300 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/5 hover:bg-white/10 transition-colors border border-white/10"
+                className="text-[10px] sm:text-[11px] text-stone-600 hover:text-rose-600 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/90 hover:bg-white transition-all border border-amber-200 shadow-sm"
                 title="Personalize Name"
               >
-                <Edit3 className="w-3 h-3 text-pink-400" />
+                <Edit3 className="w-3 h-3 text-rose-500" />
                 <span>Change Name</span>
               </button>
             ) : (
-              <div className="flex items-center gap-2 bg-zinc-900/90 p-1.5 rounded-full border border-pink-500/40 shadow-xl backdrop-blur-xl">
+              <div className="flex items-center gap-2 bg-white p-1.5 rounded-full border border-rose-300 shadow-lg">
                 <input
                   type="text"
                   value={tempName}
                   onChange={(e) => setTempName(e.target.value)}
                   placeholder="Enter Name..."
-                  className="bg-transparent text-xs font-semibold px-3 py-1 text-white focus:outline-none w-28 sm:w-32 uppercase"
+                  className="bg-transparent text-xs font-semibold px-3 py-1 text-stone-800 focus:outline-none w-28 sm:w-32 uppercase"
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && saveName()}
                 />
                 <button
                   onClick={saveName}
-                  className="p-1 rounded-full bg-pink-500 text-white hover:bg-pink-600 transition-colors"
+                  className="p-1 rounded-full bg-rose-500 text-white hover:bg-rose-600 transition-colors"
                 >
                   <Check className="w-3.5 h-3.5" />
                 </button>
@@ -192,29 +206,29 @@ export default function HeroSection() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="mb-8 px-2 max-w-2xl"
+          className="mb-7 px-2 max-w-2xl"
         >
-          <p className="font-script text-xl sm:text-2xl md:text-3xl text-pink-200/95 leading-relaxed mb-1.5">
-            &ldquo;Wishing you a day as unique, breathtaking, and bright as you are.&rdquo;
+          <p className="font-script text-2xl sm:text-3xl md:text-4xl text-rose-700 leading-relaxed mb-2">
+            &ldquo;Wishing you a day as radiant as sunflowers and as beautiful as roses.&rdquo;
           </p>
-          <p className="text-[11px] sm:text-xs text-amber-300/80 italic font-body">
-            &ldquo;The Lord bless you and keep you; the Lord make His face shine upon you and give you peace.&rdquo; — Numbers 6:24-26
+          <p className="text-xs sm:text-sm text-stone-600 italic font-body">
+            &ldquo;The Lord bless you and keep you; the Lord make His face shine upon you and give you peace.&rdquo; — Numbers 6:24-26 ✝️
           </p>
         </motion.div>
 
-        {/* Core Image Feature: Centrally featured birthday photo (Responsive on phone) */}
+        {/* Core Image Feature: Centrally featured portrait with Golden Sunflower & Rose Aura */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.85 }}
+          initial={{ opacity: 0, scale: 0.88 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.5, type: "spring", stiffness: 90 }}
-          className="relative group my-2 mb-10"
+          className="relative group my-2 mb-9"
         >
-          {/* Animated Radiant Rings & Halo Glow */}
-          <div className="absolute -inset-3 sm:-inset-4 bg-gradient-to-r from-pink-500 via-amber-400 to-teal-400 rounded-full blur-xl sm:blur-2xl opacity-40 group-hover:opacity-75 transition duration-700 animate-spin-slow" />
-          <div className="absolute -inset-1 bg-gradient-to-tr from-rose-500 via-pink-500 to-amber-300 rounded-full opacity-70 blur-sm animate-pulse-glow" />
+          {/* Animated Radiant Rings & Sun-Kissed Halo */}
+          <div className="absolute -inset-4 sm:-inset-5 bg-gradient-to-r from-amber-300 via-rose-300 to-yellow-300 rounded-full blur-xl sm:blur-2xl opacity-60 group-hover:opacity-90 transition duration-700 animate-spin-slow" />
+          <div className="absolute -inset-1.5 bg-gradient-to-tr from-rose-400 via-amber-300 to-yellow-200 rounded-full opacity-75 blur-xs animate-pulse-glow" />
 
           {/* Central Portrait Container */}
-          <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-88 md:h-88 rounded-full overflow-hidden p-2 sm:p-2.5 bg-gradient-to-tr from-pink-500/80 via-purple-500/40 to-amber-400/80 shadow-2xl shadow-rose-950/80 border-2 border-white/20">
+          <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-84 md:h-84 rounded-full overflow-hidden p-2 sm:p-2.5 bg-gradient-to-tr from-amber-200 via-rose-200 to-yellow-100 shadow-2xl shadow-rose-950/15 border-4 border-white">
             <div className="relative w-full h-full rounded-full overflow-hidden">
               <Image
                 src="/birthday/home/birthday_main.jpg"
@@ -222,115 +236,76 @@ export default function HeroSection() {
                 fill
                 priority
                 className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
-                sizes="(max-width: 640px) 224px, (max-width: 768px) 288px, 352px"
+                sizes="(max-width: 640px) 224px, (max-width: 768px) 288px, 336px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-30 group-hover:opacity-10 transition-opacity duration-300" />
             </div>
           </div>
 
-          {/* Floating Badges */}
+          {/* Floating Rose Badge */}
           <motion.div
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-2 -right-1 sm:right-2 glass-panel-warm px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-pink-400/40 shadow-xl flex items-center gap-2"
+            className="absolute -bottom-2 -right-1 sm:right-2 glass-panel-warm px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-rose-300 shadow-lg flex items-center gap-2"
           >
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-pink-500/30 flex items-center justify-center text-pink-300">
-              <Heart className="w-3.5 h-3.5 fill-current text-pink-400 animate-ping" />
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-100 flex items-center justify-center text-rose-500">
+              <span className="text-sm">🌹</span>
             </div>
             <div className="text-left">
-              <p className="text-[9px] sm:text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">Special Day</p>
-              <p className="text-[11px] sm:text-xs font-bold text-white">Forever Beautiful</p>
+              <p className="text-[9px] sm:text-[10px] text-stone-500 uppercase tracking-widest font-semibold">Special Day</p>
+              <p className="text-[11px] sm:text-xs font-bold text-stone-900">Forever Beautiful</p>
             </div>
           </motion.div>
 
+          {/* Floating Sunflower Badge */}
           <motion.div
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            className="absolute -top-1 -left-1 sm:left-2 glass-panel-gold px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-amber-400/40 shadow-xl flex items-center gap-2"
+            className="absolute -top-1 -left-1 sm:left-2 glass-panel-gold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-amber-300 shadow-lg flex items-center gap-2"
           >
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-amber-500/30 flex items-center justify-center text-amber-300">
-              <Crown className="w-3.5 h-3.5 text-amber-300" />
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+              <span className="text-sm">🌻</span>
             </div>
             <div className="text-left">
-              <p className="text-[9px] sm:text-[10px] text-amber-300 uppercase tracking-widest font-semibold">Our Blessing</p>
-              <p className="text-[11px] sm:text-xs font-bold text-white">Pure Radiance</p>
+              <p className="text-[9px] sm:text-[10px] text-amber-800 uppercase tracking-widest font-semibold">Our Blessing</p>
+              <p className="text-[11px] sm:text-xs font-bold text-stone-900">Pure Sunshine</p>
             </div>
           </motion.div>
         </motion.div>
 
-        {/* Pulsating Countdown Timer (Optimized for Mobile) */}
+        {/* Interactive Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="w-full max-w-lg mx-auto mb-8 px-2"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-xl px-2"
         >
-          <div className="glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-6 border border-white/15 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-400 via-pink-500 to-amber-400" />
-
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <Calendar className="w-3.5 h-3.5 text-pink-400 animate-pulse" />
-              <span className="text-[11px] sm:text-xs md:text-sm font-semibold tracking-widest uppercase text-pink-200">
-                Celebration Live Countdown
-              </span>
-            </div>
-
-            <div className="grid grid-cols-4 gap-2 sm:gap-3">
-              {[
-                { label: "Days", value: countdown.days },
-                { label: "Hours", value: countdown.hours },
-                { label: "Minutes", value: countdown.minutes },
-                { label: "Seconds", value: countdown.seconds },
-              ].map((item, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col items-center justify-center p-2 sm:p-3.5 rounded-xl sm:rounded-2xl bg-black/40 border border-white/10 hover:border-pink-500/40 transition-colors shadow-inner"
-                >
-                  <span className="font-display text-xl sm:text-3xl md:text-4xl font-black text-white tracking-wider tabular-nums">
-                    {String(item.value).padStart(2, "0")}
-                  </span>
-                  <span className="text-[9px] sm:text-[11px] uppercase font-medium text-zinc-400 tracking-wider mt-0.5 sm:mt-1">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-[11px] sm:text-xs text-zinc-400 mt-3 italic text-center">
-              ✨ Every second celebrates the blessing of having you in this world ✨
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Interactive Action Buttons (Stacked cleanly on phone) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md px-2 mb-4"
-        >
+          {/* Shower Sunflowers & Roses Celebration Button */}
           <button
-            onClick={launchFireworkConfetti}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-amber-500 text-white font-semibold text-xs sm:text-sm shadow-xl shadow-pink-500/25 hover:shadow-pink-500/40 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+            onClick={launchSunflowerAndRoseConfetti}
+            className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-gradient-to-r from-amber-500 via-rose-500 to-pink-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-amber-500/25 hover:shadow-amber-500/40 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
           >
-            <Gift className="w-4 h-4 animate-bounce" />
-            <span>Launch Birthday Fireworks! 🎆</span>
+            <span className="text-base">🌻</span>
+            <span>Shower Sunflowers &amp; Roses! 🌹</span>
           </button>
 
-          <a
-            href="#dad-wish"
-            className="w-full sm:w-auto px-5 py-3.5 rounded-full glass-panel hover:bg-white/10 text-white font-medium text-xs sm:text-sm transition-all hover:scale-105 active:scale-95 border border-white/20 flex items-center justify-center gap-2 shadow-lg"
+          {/* Launch Fireworks Button */}
+          <button
+            onClick={launchFireworkConfetti}
+            className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white hover:bg-stone-50 text-stone-800 font-semibold text-xs sm:text-sm border border-rose-200 shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
           >
-            <Heart className="w-4 h-4 text-amber-400 fill-amber-400/50" />
-            <span>Read Dad&apos;s Wish</span>
-          </a>
+            <Gift className="w-4 h-4 text-rose-500 animate-bounce" />
+            <span>Birthday Fireworks 🎆</span>
+          </button>
 
+          {/* Jump to Wishes */}
           <a
-            href="#gallery"
-            className="w-full sm:w-auto px-5 py-3.5 rounded-full glass-panel hover:bg-white/10 text-zinc-300 hover:text-white font-medium text-xs sm:text-sm transition-all hover:scale-105 border border-white/15 flex items-center justify-center gap-1.5"
+            href="#my-wish"
+            className="w-full sm:w-auto px-5 py-3.5 rounded-full glass-panel hover:bg-white text-stone-700 hover:text-stone-900 font-medium text-xs sm:text-sm transition-all hover:scale-105 border border-stone-200 shadow-sm flex items-center justify-center gap-1.5"
           >
-            <span>Memories</span>
-            <ArrowDown className="w-3.5 h-3.5 text-cyan-400 animate-bounce" />
+            <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
+            <span>Read Wishes</span>
+            <ArrowDown className="w-3.5 h-3.5 text-amber-600 animate-bounce" />
           </a>
         </motion.div>
       </div>
