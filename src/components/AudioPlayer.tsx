@@ -11,7 +11,7 @@ export interface AudioPlayerHandle {
 
 const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ autoStart = false }, ref) => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.7);
+  const [volume, setVolume] = useState(0.8);
   const [isMuted, setIsMuted] = useState(false);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
 
@@ -22,7 +22,6 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
   const volumeRef = useRef(volume);
   const isMutedRef = useRef(isMuted);
 
-  // Keep refs in sync for Web Audio callbacks
   useEffect(() => {
     volumeRef.current = volume;
   }, [volume]);
@@ -31,64 +30,91 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
     isMutedRef.current = isMuted;
   }, [isMuted]);
 
-  // Notes frequencies in Hz
+  // Transposed to C5-C6 (523Hz - 1046Hz) so it sounds crystalline, rich, and loud on iPhone mobile speakers!
   const NOTES: Record<string, number> = {
-    C3: 130.81,
-    F3: 174.61,
-    G3: 196.0,
-    A3: 220.0,
-    Bb3: 233.08,
     C4: 261.63,
-    D4: 293.66,
-    E4: 329.63,
     F4: 349.23,
     G4: 392.0,
     A4: 440.0,
     Bb4: 466.16,
-    B4: 493.88,
     C5: 523.25,
     D5: 587.33,
     E5: 659.25,
     F5: 698.46,
+    G5: 783.99,
+    A5: 880.0,
+    Bb5: 932.33,
+    B5: 987.77,
+    C6: 1046.5,
+    D6: 1174.66,
   };
 
   // Melody: [Note, duration in beats, bassNote (optional)]
   const MELODY: { note: string; beats: number; bass?: string }[] = [
     // Phrase 1: "Happy Birthday to you"
-    { note: "C4", beats: 0.75, bass: "C3" },
-    { note: "C4", beats: 0.25 },
-    { note: "D4", beats: 1 },
-    { note: "C4", beats: 1 },
-    { note: "F4", beats: 1 },
-    { note: "E4", beats: 2, bass: "C3" },
+    { note: "C5", beats: 0.75, bass: "C4" },
+    { note: "C5", beats: 0.25 },
+    { note: "D5", beats: 1 },
+    { note: "C5", beats: 1 },
+    { note: "F5", beats: 1 },
+    { note: "E5", beats: 2, bass: "C4" },
 
     // Phrase 2: "Happy Birthday to you"
-    { note: "C4", beats: 0.75, bass: "G3" },
-    { note: "C4", beats: 0.25 },
-    { note: "D4", beats: 1 },
-    { note: "C4", beats: 1 },
-    { note: "G4", beats: 1 },
-    { note: "F4", beats: 2, bass: "C3" },
+    { note: "C5", beats: 0.75, bass: "G4" },
+    { note: "C5", beats: 0.25 },
+    { note: "D5", beats: 1 },
+    { note: "C5", beats: 1 },
+    { note: "G5", beats: 1 },
+    { note: "F5", beats: 2, bass: "C4" },
 
     // Phrase 3: "Happy Birthday dear Sudu"
-    { note: "C4", beats: 0.75, bass: "C3" },
-    { note: "C4", beats: 0.25 },
-    { note: "C5", beats: 1, bass: "F3" },
-    { note: "A4", beats: 1 },
-    { note: "F4", beats: 1 },
-    { note: "E4", beats: 1 },
-    { note: "D4", beats: 1.5, bass: "G3" },
+    { note: "C5", beats: 0.75, bass: "C4" },
+    { note: "C5", beats: 0.25 },
+    { note: "C6", beats: 1, bass: "F4" },
+    { note: "A5", beats: 1 },
+    { note: "F5", beats: 1 },
+    { note: "E5", beats: 1 },
+    { note: "D5", beats: 1.5, bass: "G4" },
 
     // Phrase 4: "Happy Birthday to you"
-    { note: "Bb4", beats: 0.75, bass: "Bb3" },
-    { note: "Bb4", beats: 0.25 },
-    { note: "A4", beats: 1, bass: "F3" },
-    { note: "F4", beats: 1 },
-    { note: "G4", beats: 1, bass: "C3" },
-    { note: "F4", beats: 2.5, bass: "F3" },
+    { note: "Bb5", beats: 0.75, bass: "Bb4" },
+    { note: "Bb5", beats: 0.25 },
+    { note: "A5", beats: 1, bass: "F4" },
+    { note: "F5", beats: 1 },
+    { note: "G5", beats: 1, bass: "C4" },
+    { note: "F5", beats: 2.5, bass: "F4" },
   ];
 
-  // Helper to safely play a music box chime note
+  // Robust AudioContext initialization with iOS WebKit unlock
+  const getAudioContext = (): AudioContext => {
+    if (!audioCtxRef.current || audioCtxRef.current.state === "closed") {
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      audioCtxRef.current = new AudioCtx();
+    }
+
+    const ctx = audioCtxRef.current;
+
+    // Wake up iOS audio hardware route
+    if (ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
+    }
+
+    try {
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.start(0);
+    } catch {
+      // ignore
+    }
+
+    return ctx;
+  };
+
+  // Play Celesta / Music Box chime note
   const playChimeNote = (
     ctx: AudioContext,
     freq: number,
@@ -97,58 +123,57 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
     vol: number
   ) => {
     const t = Math.max(startTime, ctx.currentTime + 0.02);
-    const actualVol = isMutedRef.current ? 0.0001 : Math.max(0.0001, vol * volumeRef.current * 0.28);
+    const actualVol = isMutedRef.current ? 0.0001 : Math.max(0.0001, vol * volumeRef.current * 0.32);
 
     const osc = ctx.createOscillator();
     const oscHarmonic = ctx.createOscillator();
-    const oscChime = ctx.createOscillator();
+    const oscShimmer = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
     osc.type = "sine";
     osc.frequency.setValueAtTime(freq, t);
 
-    // Warm wooden chime overtone
+    // Warm overtone
     oscHarmonic.type = "triangle";
     oscHarmonic.frequency.setValueAtTime(freq * 2, t);
 
     // Sparkle chime ping
-    oscChime.type = "sine";
-    oscChime.frequency.setValueAtTime(freq * 3, t);
+    oscShimmer.type = "sine";
+    oscShimmer.frequency.setValueAtTime(freq * 3, t);
 
-    // Envelope
     gainNode.gain.setValueAtTime(0.0001, t);
     gainNode.gain.linearRampToValueAtTime(actualVol, t + 0.02);
-    gainNode.gain.exponentialRampToValueAtTime(Math.max(0.0001, actualVol * 0.35), t + 0.15);
+    gainNode.gain.exponentialRampToValueAtTime(Math.max(0.0001, actualVol * 0.4), t + 0.16);
     gainNode.gain.exponentialRampToValueAtTime(0.0001, t + duration * 0.96);
 
     const harmonicGain = ctx.createGain();
-    harmonicGain.gain.setValueAtTime(0.28, t);
+    harmonicGain.gain.setValueAtTime(0.3, t);
 
-    const chimeGain = ctx.createGain();
-    chimeGain.gain.setValueAtTime(0.12, t);
-    chimeGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    const shimmerGain = ctx.createGain();
+    shimmerGain.gain.setValueAtTime(0.18, t);
+    shimmerGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
 
     osc.connect(gainNode);
     oscHarmonic.connect(harmonicGain);
     harmonicGain.connect(gainNode);
-    oscChime.connect(chimeGain);
-    chimeGain.connect(gainNode);
+    oscShimmer.connect(shimmerGain);
+    shimmerGain.connect(gainNode);
 
     gainNode.connect(ctx.destination);
 
     osc.start(t);
     oscHarmonic.start(t);
-    oscChime.start(t);
+    oscShimmer.start(t);
 
     const stopTime = t + duration;
     osc.stop(stopTime);
     oscHarmonic.stop(stopTime);
-    oscChime.stop(stopTime);
+    oscShimmer.stop(stopTime);
 
-    activeNodesRef.current.push(osc, oscHarmonic, oscChime);
+    activeNodesRef.current.push(osc, oscHarmonic, oscShimmer);
   };
 
-  // Helper to play soft acoustic bass accompaniment
+  // Play soft bass accompaniment
   const playBassNote = (
     ctx: AudioContext,
     freq: number,
@@ -157,7 +182,7 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
     vol: number
   ) => {
     const t = Math.max(startTime, ctx.currentTime + 0.02);
-    const actualVol = isMutedRef.current ? 0.0001 : Math.max(0.0001, vol * volumeRef.current * 0.16);
+    const actualVol = isMutedRef.current ? 0.0001 : Math.max(0.0001, vol * volumeRef.current * 0.2);
 
     const osc = ctx.createOscillator();
     const gainNode = ctx.createGain();
@@ -179,16 +204,6 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
     activeNodesRef.current.push(osc);
   };
 
-  const getAudioContext = (): AudioContext => {
-    if (!audioCtxRef.current) {
-      const AudioCtx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      audioCtxRef.current = new AudioCtx();
-    }
-    return audioCtxRef.current;
-  };
-
   const scheduleMelody = () => {
     if (!isPlayingRef.current) return;
 
@@ -197,10 +212,9 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
       ctx.resume().catch(() => {});
     }
 
-    // Clean up expired nodes from active array
     activeNodesRef.current = [];
 
-    const beatDuration = 0.54; // Gentle warm tempo
+    const beatDuration = 0.52;
     let currentTime = ctx.currentTime + 0.08;
 
     MELODY.forEach((item) => {
@@ -214,14 +228,14 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
       if (item.bass) {
         const bassFreq = NOTES[item.bass];
         if (bassFreq) {
-          playBassNote(ctx, bassFreq, currentTime, duration * 1.4, 1.0);
+          playBassNote(ctx, bassFreq, currentTime, duration * 1.3, 1.0);
         }
       }
 
       currentTime += duration;
     });
 
-    const loopDelayMs = (currentTime - ctx.currentTime) * 1000 + 1400;
+    const loopDelayMs = (currentTime - ctx.currentTime) * 1000 + 1200;
 
     loopTimeoutRef.current = setTimeout(() => {
       if (isPlayingRef.current) {
@@ -232,6 +246,8 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
 
   const startPlaying = async () => {
     try {
+      if (isPlayingRef.current) return;
+
       const ctx = getAudioContext();
       if (ctx.state === "suspended") {
         await ctx.resume();
@@ -246,7 +262,7 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
       setIsPlaying(true);
       scheduleMelody();
     } catch (err) {
-      console.warn("Failed to start audio:", err);
+      console.warn("Failed to start audio on iOS Chrome:", err);
     }
   };
 
@@ -259,7 +275,6 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
       loopTimeoutRef.current = null;
     }
 
-    // Immediately stop active oscillators
     activeNodesRef.current.forEach((node) => {
       try {
         node.stop();
@@ -305,34 +320,41 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
   };
 
   useEffect(() => {
-    // If autoStart was requested, try unlocking on first user interaction
-    const handleFirstGesture = () => {
-      if (autoStart && !isPlayingRef.current) {
-        startPlaying();
+    // Global user-gesture audio unlocker specifically engineered for iOS Chrome & Safari
+    const unlockOnGesture = () => {
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === "suspended") {
+          ctx.resume().catch(() => {});
+        }
+      } catch {
+        // ignore
       }
-      window.removeEventListener("click", handleFirstGesture);
-      window.removeEventListener("touchstart", handleFirstGesture);
     };
 
-    window.addEventListener("click", handleFirstGesture, { once: true });
-    window.addEventListener("touchstart", handleFirstGesture, { once: true });
+    window.addEventListener("touchstart", unlockOnGesture, { passive: true, once: true });
+    window.addEventListener("pointerdown", unlockOnGesture, { passive: true, once: true });
+    window.addEventListener("click", unlockOnGesture, { passive: true, once: true });
 
     return () => {
-      window.removeEventListener("click", handleFirstGesture);
-      window.removeEventListener("touchstart", handleFirstGesture);
+      window.removeEventListener("touchstart", unlockOnGesture);
+      window.removeEventListener("pointerdown", unlockOnGesture);
+      window.removeEventListener("click", unlockOnGesture);
       stopPlaying();
       if (audioCtxRef.current) {
         audioCtxRef.current.close().catch(() => {});
       }
     };
-  }, [autoStart]);
+  }, []);
 
   return (
     <aside aria-label="Birthday Song Controller" className="fixed top-3 sm:top-5 right-3 sm:right-5 z-40 flex items-center gap-1.5 sm:gap-2">
       <div className="bg-white/95 rounded-full px-3 py-2 flex items-center gap-2.5 border border-amber-200/90 shadow-xl shadow-amber-950/8 backdrop-blur-2xl transition-all">
-        {/* Play / Pause Toggle Button */}
+        {/* Play / Pause Toggle Button with direct touchstart listener for iOS */}
         <button
           onClick={togglePlay}
+          onTouchStart={getAudioContext}
+          onPointerDown={getAudioContext}
           className="relative p-2 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center group"
           title={isPlaying ? "Pause Birthday Song" : "Play Birthday Song"}
           aria-label={isPlaying ? "Pause music" : "Play music"}
@@ -364,7 +386,7 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
           </div>
           <span className="text-[9px] sm:text-[10px] text-stone-500 flex items-center gap-1">
             {isPlaying ? (
-              <span className="text-amber-700 font-medium">🎵 Playing for Sudu</span>
+              <span className="text-amber-700 font-medium">🎵 Playing (Silent switch off 🔔)</span>
             ) : (
               <span>Tap to Play Song 🌻</span>
             )}
@@ -399,7 +421,7 @@ const AudioPlayer = forwardRef<AudioPlayerHandle, { autoStart?: boolean }>(({ au
             )}
           </button>
 
-          {/* Quick Slider Popup on hover/focus */}
+          {/* Quick Slider Popup on hover */}
           {showVolumeSlider && (
             <div
               onMouseLeave={() => setShowVolumeSlider(false)}

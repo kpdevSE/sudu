@@ -4,12 +4,9 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, Sparkles, Flame, Star, Quote, CheckCircle2 } from "lucide-react";
-import { launchHeartConfetti, launchSunflowerAndRoseConfetti } from "./ConfettiLauncher";
 
 export default function BoyfriendWishSection() {
   const [heartsCount, setHeartsCount] = useState(1024);
-  const [isAutoSending, setIsAutoSending] = useState(true);
-  const [activeReason, setActiveReason] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [floatingHearts, setFloatingHearts] = useState<{ id: number; x: number }[]>([]);
 
@@ -39,7 +36,6 @@ export default function BoyfriendWishSection() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsAutoSending(true);
           if (!interval) {
             interval = setInterval(() => {
               setHeartsCount((prev) => prev + 1);
@@ -71,7 +67,6 @@ export default function BoyfriendWishSection() {
 
   const handleSendHeart = () => {
     setHeartsCount((prev) => prev + 5);
-    launchHeartConfetti();
   };
 
   const containerVariants = {
@@ -101,15 +96,19 @@ export default function BoyfriendWishSection() {
       id="my-wish"
       className="relative py-20 sm:py-28 px-3 sm:px-6 overflow-hidden bg-gradient-to-b from-[#fff5f8] via-[#fffbf9] to-[#fff3f6]"
     >
-      {/* Soft Luminous Warm Glow & Ambient Floating Flowers */}
+      {/* Background with Sunflowers, Roses, and Hearts */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 sm:w-[34rem] h-80 sm:h-[34rem] bg-rose-200/40 rounded-full blur-[120px] animate-pulse-glow" />
         <div className="absolute bottom-10 right-1/4 w-80 sm:w-96 h-80 sm:h-96 bg-amber-200/40 rounded-full blur-[110px] animate-float" />
         <div className="absolute top-10 right-10 w-72 h-72 bg-pink-100/60 rounded-full blur-[90px]" />
 
-        {/* Ambient Sunflowers & Roses */}
-        <div className="absolute top-16 left-8 text-3xl opacity-75 select-none animate-float">🌻</div>
-        <div className="absolute bottom-20 right-8 text-3xl opacity-75 select-none animate-float-reverse">🌹</div>
+        {/* Floating Sunflowers, Roses, and Hearts */}
+        <div className="absolute top-16 left-8 text-3xl opacity-80 select-none animate-float">🌻</div>
+        <div className="absolute top-28 right-12 text-2xl opacity-80 select-none animate-float-reverse">💖</div>
+        <div className="absolute bottom-20 right-8 text-3xl opacity-80 select-none animate-float-reverse">🌹</div>
+        <div className="absolute bottom-24 left-14 text-2xl opacity-80 select-none animate-float">💖</div>
+        <div className="absolute top-1/2 right-6 text-2xl opacity-70 select-none animate-float">🌻</div>
+        <div className="absolute top-1/3 left-6 text-2xl opacity-70 select-none animate-float-reverse">🌹</div>
       </div>
 
       <div className="max-w-6xl mx-auto">
@@ -279,10 +278,7 @@ export default function BoyfriendWishSection() {
 
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => {
-                      handleSendHeart();
-                      launchSunflowerAndRoseConfetti();
-                    }}
+                    onClick={handleSendHeart}
                     className="px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white font-medium text-xs sm:text-sm shadow-md hover:shadow-rose-500/25 transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
                   >
                     <Heart className="w-4 h-4 fill-current" />
@@ -309,12 +305,7 @@ export default function BoyfriendWishSection() {
                   <motion.div
                     key={idx}
                     variants={tileVariants}
-                    onClick={() => setActiveReason(activeReason === idx ? null : idx)}
-                    className={`p-4 rounded-2xl transition-all duration-300 border ${
-                      activeReason === idx
-                        ? "border-rose-400 bg-rose-50 shadow-md shadow-rose-900/5 scale-[1.01]"
-                        : "bg-white/95 border-stone-200/90 hover:border-rose-200 hover:bg-white shadow-xs"
-                    }`}
+                    className="p-4 rounded-2xl transition-all duration-300 border bg-white/95 border-stone-200/90 shadow-xs"
                   >
                     <div className="flex items-center gap-2 mb-2">
                       <span className="p-1.5 rounded-lg bg-amber-50 text-amber-500">
@@ -323,7 +314,6 @@ export default function BoyfriendWishSection() {
                       <h4 className="text-xs sm:text-sm font-bold text-stone-900">{item.title}</h4>
                     </div>
 
-                    {/* Always visible description so she can read effortlessly without clicking! */}
                     <p className="text-xs text-stone-600 leading-relaxed font-body pl-1">
                       {item.desc}
                     </p>

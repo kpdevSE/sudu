@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Heart, Sparkles, Image as ImageIcon, Users, MessageSquareQuote, Crown } from "lucide-react";
-import { launchSunflowerAndRoseConfetti } from "./ConfettiLauncher";
 
 interface NavItem {
   id: string;
@@ -125,18 +124,18 @@ export default function FloatingNav() {
           );
         })}
 
-        {/* Rightmost Quick Floral Confetti Button (WhatsApp Avatar Style) */}
+        {/* Rightmost Quick Floral Button (WhatsApp Avatar Style) */}
         <button
-          onClick={launchSunflowerAndRoseConfetti}
+          onClick={() => scrollTo("hero")}
           className="flex flex-col items-center justify-center py-1 px-1.5 rounded-2xl transition-all duration-200 group focus:outline-none"
-          title="Shower Sunflowers & Roses"
-          aria-label="Shower sunflowers and roses"
+          title="Back to Top Celebration"
+          aria-label="Back to top celebration"
         >
           <div className="p-1 rounded-full bg-amber-100/80 text-amber-600 border border-amber-200 group-hover:scale-110 active:scale-95 transition-transform flex items-center justify-center w-7 h-7 shadow-xs">
             <span className="text-sm">🌻</span>
           </div>
           <span className="text-[10px] font-semibold text-amber-800 tracking-tight mt-0.5">
-            Shower
+            Top
           </span>
         </button>
       </div>

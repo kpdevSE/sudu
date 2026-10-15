@@ -1,13 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Gift, Sparkles, Heart } from "lucide-react";
-import {
-  launchFireworkConfetti,
-  launchHeartConfetti,
-  launchSunflowerAndRoseConfetti,
-} from "./ConfettiLauncher";
 
 interface SurpriseModalProps {
   onOpen: () => void;
@@ -16,35 +11,22 @@ interface SurpriseModalProps {
 export default function SurpriseModal({ onOpen }: SurpriseModalProps) {
   const [isOpen, setIsOpen] = useState(true);
 
-  // Auto-launch celebratory confetti when modal loads
-  useEffect(() => {
-    launchSunflowerAndRoseConfetti();
-    const t = setTimeout(() => {
-      launchHeartConfetti();
-    }, 900);
-    return () => clearTimeout(t);
-  }, []);
-
   const handleOpen = () => {
     // 1. Immediately trigger audio in the active user gesture
     onOpen();
-
-    // 2. Launch flower & firework celebrations
-    launchSunflowerAndRoseConfetti();
-    launchFireworkConfetti();
-    setTimeout(() => launchHeartConfetti(), 600);
-
-    // 3. Close modal smoothly
+    // 2. Close modal smoothly (no confetti)
     setIsOpen(false);
   };
 
-  // Floating background flowers for the light modal
-  const modalFlowers = [
+  // Sunflowers, Roses, and Heart emojis drifting in the background of the modal
+  const modalEmojis = [
     { emoji: "🌻", x: "8%", y: "15%", size: "text-2xl sm:text-3xl", delay: 0 },
     { emoji: "🌹", x: "85%", y: "18%", size: "text-2xl sm:text-3xl", delay: 0.5 },
+    { emoji: "💖", x: "48%", y: "8%", size: "text-xl sm:text-2xl", delay: 0.3 },
     { emoji: "🌻", x: "86%", y: "78%", size: "text-2xl sm:text-3xl", delay: 1 },
     { emoji: "🌹", x: "10%", y: "80%", size: "text-2xl sm:text-3xl", delay: 1.5 },
-    { emoji: "✨", x: "48%", y: "8%", size: "text-lg sm:text-xl", delay: 0.3 },
+    { emoji: "💖", x: "78%", y: "48%", size: "text-lg sm:text-xl", delay: 0.8 },
+    { emoji: "🌻", x: "12%", y: "48%", size: "text-lg sm:text-xl", delay: 1.2 },
   ];
 
   return (
@@ -55,21 +37,19 @@ export default function SurpriseModal({ onOpen }: SurpriseModalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.04 }}
           transition={{ duration: 0.4 }}
-          className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden p-3.5 sm:p-4 bg-white/80 backdrop-blur-2xl flex min-h-[100dvh] items-center justify-center"
+          className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden p-3.5 sm:p-4 bg-white/85 backdrop-blur-2xl flex min-h-[100dvh] items-center justify-center"
           onClick={handleOpen}
         >
           {/* Luminous Light Theme Glows */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-72 sm:w-[30rem] h-72 sm:h-[30rem] bg-gradient-to-r from-amber-200/50 via-rose-200/40 to-yellow-100/60 rounded-full blur-[100px] animate-pulse-glow" />
-            <div className="absolute bottom-10 left-10 w-56 h-56 bg-pink-100/60 rounded-full blur-[80px]" />
-            <div className="absolute top-10 right-10 w-56 h-56 bg-amber-100/60 rounded-full blur-[80px]" />
 
-            {/* Drifting Sunflowers and Roses in the Light Modal Background */}
-            {modalFlowers.map((flower, idx) => (
+            {/* Drifting Sunflowers, Roses, and Hearts in Background */}
+            {modalEmojis.map((item, idx) => (
               <motion.div
                 key={idx}
-                className={`absolute ${flower.size} select-none drop-shadow-sm opacity-80`}
-                style={{ left: flower.x, top: flower.y }}
+                className={`absolute ${item.size} select-none drop-shadow-sm opacity-85`}
+                style={{ left: item.x, top: item.y }}
                 animate={{
                   y: ["0px", "-14px", "0px"],
                   rotate: [0, idx % 2 === 0 ? 15 : -15, 0],
@@ -79,15 +59,15 @@ export default function SurpriseModal({ onOpen }: SurpriseModalProps) {
                   duration: 5 + idx,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: flower.delay,
+                  delay: item.delay,
                 }}
               >
-                {flower.emoji}
+                {item.emoji}
               </motion.div>
             ))}
           </div>
 
-          {/* Modal Card - Sized for Mobile iPhone and Desktop with Zero Cutoff */}
+          {/* Modal Card - Sized for Mobile iPhone and Desktop */}
           <motion.div
             initial={{ scale: 0.9, y: 15 }}
             animate={{ scale: 1, y: 0 }}
@@ -102,6 +82,7 @@ export default function SurpriseModal({ onOpen }: SurpriseModalProps) {
               <span className="text-[11px] sm:text-xs font-bold tracking-widest uppercase">
                 ✝️ God&apos;s Special Blessing 🌹
               </span>
+              <span className="text-xs sm:text-sm">💖</span>
             </div>
 
             {/* Pulsating Gift Box Icon */}
@@ -124,9 +105,11 @@ export default function SurpriseModal({ onOpen }: SurpriseModalProps) {
               </span>
             </p>
 
-            {/* Main Action Button */}
+            {/* Main Action Button with direct touch listeners for iPhone Chrome */}
             <button
               onClick={handleOpen}
+              onTouchStart={onOpen}
+              onPointerDown={onOpen}
               className="w-full py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-rose-500/25 hover:shadow-rose-500/40 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 group"
             >
               <Sparkles className="w-4 h-4 text-amber-200 animate-spin-slow" />
@@ -134,7 +117,7 @@ export default function SurpriseModal({ onOpen }: SurpriseModalProps) {
             </button>
 
             <p className="text-[10px] sm:text-xs text-stone-500 mt-2.5 sm:mt-3 flex items-center justify-center gap-1">
-              <Heart className="w-3 h-3 text-rose-500 fill-current" /> Tap anywhere to enter &amp; start celebration 🌻🌹
+              <Heart className="w-3 h-3 text-rose-500 fill-current" /> Tap anywhere to enter &amp; start celebration 🌻🌹💖
             </p>
           </motion.div>
         </motion.div>

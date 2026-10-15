@@ -14,7 +14,6 @@ import {
   LayoutGrid,
   Film,
 } from "lucide-react";
-import { launchSunflowerAndRoseConfetti } from "./ConfettiLauncher";
 
 interface GalleryPhoto {
   id: number;
@@ -172,7 +171,6 @@ export default function PhotoGallerySection() {
       ...prev,
       [id]: (prev[id] || 0) + 1,
     }));
-    launchSunflowerAndRoseConfetti();
   };
 
   return (
@@ -180,12 +178,16 @@ export default function PhotoGallerySection() {
       id="gallery"
       className="relative py-20 sm:py-28 px-3 sm:px-6 overflow-hidden bg-gradient-to-b from-[#fff5f8] via-[#ffffff] to-[#fffaf6]"
     >
-      {/* Background Ambience */}
+      {/* Background Ambience with Sunflowers, Roses, and Hearts */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute top-1/3 right-1/4 w-72 sm:w-[36rem] h-72 sm:h-[36rem] bg-rose-200/35 rounded-full blur-[110px] animate-pulse-glow" />
         <div className="absolute bottom-10 left-6 sm:left-10 w-72 sm:w-[30rem] h-72 sm:h-[30rem] bg-amber-200/35 rounded-full blur-[100px] animate-float" />
-        <div className="absolute top-16 left-6 text-3xl opacity-75 select-none animate-float">🌻</div>
-        <div className="absolute bottom-16 right-6 text-3xl opacity-75 select-none animate-float-reverse">🌹</div>
+        <div className="absolute top-16 left-6 text-3xl opacity-80 select-none animate-float">🌻</div>
+        <div className="absolute top-28 right-8 text-2xl opacity-80 select-none animate-float-reverse">💖</div>
+        <div className="absolute bottom-16 right-6 text-3xl opacity-80 select-none animate-float-reverse">🌹</div>
+        <div className="absolute bottom-24 left-10 text-2xl opacity-80 select-none animate-float">💖</div>
+        <div className="absolute top-1/2 left-4 text-2xl opacity-75 select-none animate-float">🌹</div>
+        <div className="absolute top-1/2 right-4 text-2xl opacity-75 select-none animate-float-reverse">🌻</div>
       </div>
 
       <div className="max-w-6xl mx-auto">

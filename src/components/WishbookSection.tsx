@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { MessageSquareQuote, Send, Sparkles, Heart, Star } from "lucide-react";
-import { launchFireworkConfetti, launchHeartConfetti, launchSunflowerAndRoseConfetti } from "./ConfettiLauncher";
 
 interface Wish {
   id: string;
@@ -96,16 +95,20 @@ export default function WishbookSection() {
 
     setAuthor("");
     setMessage("");
-    launchSunflowerAndRoseConfetti();
-    launchFireworkConfetti();
   };
 
   return (
     <section id="wishbook" className="relative py-20 sm:py-28 px-3 sm:px-6 overflow-hidden bg-gradient-to-b from-[#fffaf6] via-[#ffffff] to-[#fff5f8]">
-      {/* Background Ambience */}
+      {/* Background Ambience with Sunflowers, Roses, and Hearts */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute top-1/2 left-1/3 w-72 sm:w-[34rem] h-72 sm:h-[34rem] bg-purple-100/60 rounded-full blur-[100px] animate-pulse-glow" />
         <div className="absolute bottom-10 right-1/4 w-64 sm:w-80 h-64 sm:h-80 bg-rose-100/60 rounded-full blur-[90px] animate-float" />
+        <div className="absolute top-16 left-8 text-3xl opacity-80 select-none animate-float">🌻</div>
+        <div className="absolute top-24 right-10 text-2xl opacity-80 select-none animate-float-reverse">💖</div>
+        <div className="absolute bottom-16 right-8 text-3xl opacity-80 select-none animate-float-reverse">🌹</div>
+        <div className="absolute bottom-20 left-12 text-2xl opacity-80 select-none animate-float">💖</div>
+        <div className="absolute top-1/2 left-4 text-2xl opacity-75 select-none animate-float">🌹</div>
+        <div className="absolute top-1/2 right-4 text-2xl opacity-75 select-none animate-float-reverse">🌻</div>
       </div>
 
       <div className="max-w-5xl mx-auto">
@@ -253,13 +256,9 @@ export default function WishbookSection() {
                   <p className="text-[11px] sm:text-xs font-bold text-stone-900 tracking-wide">
                     — {item.author}
                   </p>
-                  <button
-                    onClick={launchHeartConfetti}
-                    className="text-rose-500 hover:text-rose-700 p-1 transition-colors"
-                    title="Send Love"
-                  >
+                  <span className="text-rose-500 p-1" title="Blessed with Love">
                     <Heart className="w-3.5 h-3.5 fill-current" />
-                  </button>
+                  </span>
                 </div>
               </motion.div>
             ))}

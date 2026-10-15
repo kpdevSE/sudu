@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Sparkles, Heart, Sun } from "lucide-react";
-import { launchHeartConfetti, launchSunflowerAndRoseConfetti } from "./ConfettiLauncher";
 
 export default function GrandparentsWishSection() {
   const [achchiBlessings, setAchchiBlessings] = useState(108);
@@ -33,12 +32,17 @@ export default function GrandparentsWishSection() {
       id="grandparents-wish"
       className="relative py-20 sm:py-28 px-3 sm:px-6 overflow-hidden bg-gradient-to-b from-[#fffbf5] via-[#ffffff] to-[#fff5f8]"
     >
-      {/* Background Ambience: Soft Emerald Mint & Honey Gold Warmth */}
+      {/* Background with Sunflowers, Roses, and Hearts */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute top-1/4 left-1/4 w-72 sm:w-96 h-72 sm:h-96 bg-teal-100/50 rounded-full blur-[100px] animate-pulse-glow" />
         <div className="absolute bottom-1/4 right-1/4 w-80 sm:w-[30rem] h-80 sm:h-[30rem] bg-rose-100/50 rounded-full blur-[100px] animate-float" />
-        <div className="absolute top-16 left-6 text-3xl opacity-75 select-none animate-float">🌻</div>
-        <div className="absolute bottom-16 right-6 text-3xl opacity-75 select-none animate-float-reverse">🌹</div>
+        {/* Floating Sunflowers, Roses, and Hearts */}
+        <div className="absolute top-16 left-6 text-3xl opacity-80 select-none animate-float">🌻</div>
+        <div className="absolute top-24 right-10 text-2xl opacity-80 select-none animate-float-reverse">💖</div>
+        <div className="absolute bottom-16 right-6 text-3xl opacity-80 select-none animate-float-reverse">🌹</div>
+        <div className="absolute bottom-20 left-10 text-2xl opacity-80 select-none animate-float">💖</div>
+        <div className="absolute top-1/2 left-4 text-2xl opacity-70 select-none animate-float">🌹</div>
+        <div className="absolute top-1/2 right-4 text-2xl opacity-70 select-none animate-float-reverse">🌻</div>
       </div>
 
       <div className="max-w-5xl mx-auto">
@@ -145,7 +149,6 @@ export default function GrandparentsWishSection() {
               <button
                 onClick={() => {
                   setAchchiBlessings((p) => p + 1);
-                  launchSunflowerAndRoseConfetti();
                 }}
                 className="px-3.5 py-1.5 sm:py-2 rounded-xl bg-teal-50 hover:bg-teal-600 text-teal-700 hover:text-white transition-all text-xs font-semibold border border-teal-200 flex items-center gap-1.5 active:scale-95 shadow-xs"
               >
@@ -221,7 +224,6 @@ export default function GrandparentsWishSection() {
               <button
                 onClick={() => {
                   setSeeyaBlessings((p) => p + 1);
-                  launchSunflowerAndRoseConfetti();
                 }}
                 className="px-3.5 py-1.5 sm:py-2 rounded-xl bg-amber-50 hover:bg-amber-500 text-amber-800 hover:text-white transition-all text-xs font-semibold border border-amber-200 flex items-center gap-1.5 active:scale-95 shadow-xs"
               >

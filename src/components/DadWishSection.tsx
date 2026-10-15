@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Sparkles, RotateCw, Quote, Heart, BookOpen, Camera } from "lucide-react";
-import { launchFireworkConfetti, launchSunflowerAndRoseConfetti } from "./ConfettiLauncher";
 
 export default function DadWishSection() {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -22,7 +21,6 @@ export default function DadWishSection() {
           const timer = setTimeout(() => {
             setIsFlipped(true);
             setAutoFlipNotice(true);
-            launchSunflowerAndRoseConfetti();
             setTimeout(() => setAutoFlipNotice(false), 5000);
           }, 3200);
           return () => clearTimeout(timer);
@@ -49,11 +47,17 @@ export default function DadWishSection() {
       id="dad-wish"
       className="relative py-20 sm:py-28 px-3 sm:px-6 overflow-hidden bg-gradient-to-b from-[#fff3f6] via-[#ffffff] to-[#fffbf5]"
     >
-      {/* Warm Accent Background: Sun-Kissed Gold & Soft Sky Warmth */}
+      {/* Background with Sunflowers, Roses, and Hearts */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute top-1/3 left-6 sm:left-10 w-72 sm:w-[32rem] h-72 sm:h-[32rem] bg-amber-200/35 rounded-full blur-[100px] animate-pulse-glow" />
         <div className="absolute bottom-10 right-6 sm:right-10 w-80 sm:w-[36rem] h-80 sm:h-[36rem] bg-rose-200/35 rounded-full blur-[110px] animate-float" />
-        <div className="absolute top-12 right-12 text-3xl opacity-75 select-none animate-float">🌻</div>
+        {/* Floating Sunflowers, Roses, and Hearts */}
+        <div className="absolute top-12 right-12 text-3xl opacity-80 select-none animate-float">🌻</div>
+        <div className="absolute top-20 left-10 text-2xl opacity-80 select-none animate-float-reverse">🌹</div>
+        <div className="absolute bottom-16 left-12 text-3xl opacity-80 select-none animate-float">💖</div>
+        <div className="absolute bottom-12 right-16 text-3xl opacity-80 select-none animate-float-reverse">🌻</div>
+        <div className="absolute top-1/2 left-4 text-2xl opacity-70 select-none animate-float">🌹</div>
+        <div className="absolute top-1/2 right-6 text-2xl opacity-70 select-none animate-float-reverse">💖</div>
       </div>
 
       <div className="max-w-4xl mx-auto">
@@ -271,13 +275,11 @@ export default function DadWishSection() {
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    launchFireworkConfetti();
-                    launchSunflowerAndRoseConfetti();
                   }}
                   className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-white font-semibold text-xs shadow-md hover:brightness-105 active:scale-95 transition-all flex items-center gap-1.5"
                 >
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Blessing Confetti 🌻</span>
+                  <span>Father&apos;s Blessing 🙏✝️</span>
                 </button>
               </div>
             </div>
