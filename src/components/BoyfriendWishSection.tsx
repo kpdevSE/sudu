@@ -5,10 +5,60 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, Sparkles, Flame, Star, Quote, CheckCircle2 } from "lucide-react";
 
+const WA_BASE = "/birthday/photogallery/WhatsApp Unknown 2026-10-16 at 10.47.39";
+
+const couplePhotos = [
+  {
+    src: "/birthday/my/my_photo.jpg",
+    title: "You & Me Always",
+    tag: "Forever Yours 💖",
+    caption: "Our cherished moments together that time can never fade.",
+  },
+  {
+    src: `${WA_BASE}/WhatsApp Image 2026-10-16 at 10.46.47.jpeg`,
+    title: "Forest Road Trip",
+    tag: "Adventures 🌲",
+    caption: "Leaning by the car under towering green trees, lost in laughter.",
+  },
+  {
+    src: `${WA_BASE}/WhatsApp Image 2026-10-16 at 10.46.48 (1).jpeg`,
+    title: "Candlelit Whispers",
+    tag: "Dinner Date 🍷",
+    caption: "Warm ambiance, intimate talks, and your hair cascading softly.",
+  },
+  {
+    src: `${WA_BASE}/WhatsApp Image 2026-10-16 at 10.46.49.jpeg`,
+    title: "Our Favorite Café",
+    tag: "Burger & Smoothies 🍔",
+    caption: "Juicy burgers, sweet smoothies, and movies on the laptop together.",
+  },
+  {
+    src: `${WA_BASE}/WhatsApp Image 2026-10-16 at 10.46.46.jpeg`,
+    title: "Walking Hand in Hand",
+    tag: "Pure Bliss 🤍",
+    caption: "Matching white outfits and the brightest sunshine on the road.",
+  },
+  {
+    src: `${WA_BASE}/WhatsApp Image 2026-10-16 at 10.46.48.jpeg`,
+    title: "Our Goofy Side",
+    tag: "Laughter 🤪",
+    caption: "Silly face filters and the best kind of laughter together.",
+  },
+];
+
 export default function BoyfriendWishSection() {
   const [heartsCount, setHeartsCount] = useState(1024);
+  const [activePhotoIdx, setActivePhotoIdx] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const [floatingHearts, setFloatingHearts] = useState<{ id: number; x: number }[]>([]);
+
+  // Automatically cycle through romantic memories every 4.2 seconds effortlessly!
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActivePhotoIdx((prev) => (prev + 1) % couplePhotos.length);
+    }, 4200);
+    return () => clearInterval(timer);
+  }, []);
 
   const loveReasons = [
     {
@@ -153,7 +203,7 @@ export default function BoyfriendWishSection() {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100/90 border border-rose-300 text-rose-900 text-xs font-semibold shadow-xs"
           >
             <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-            <span>Auto-Kiss Stream Active: Delivering kisses automatically so you don&apos;t have to click! 😘💋</span>
+            <span>Auto-Kiss Stream Active: Delivering kisses &amp; switching memories automatically! 😘💋</span>
           </motion.div>
         </div>
 
@@ -165,7 +215,7 @@ export default function BoyfriendWishSection() {
           viewport={{ once: true, margin: "-60px" }}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
         >
-          {/* Couple Photo Card with Polaroid Style in White Theme */}
+          {/* Couple Photo Card with Polaroid Style + Multi-Photo Filmstrip */}
           <motion.div variants={tileVariants} className="lg:col-span-5 flex flex-col items-center sticky top-24">
             <div className="relative w-full max-w-md group">
               {/* Soft Radiant Halo */}
@@ -174,37 +224,77 @@ export default function BoyfriendWishSection() {
               {/* Polaroid Frame */}
               <div className="relative bg-white/95 p-4 sm:p-5 rounded-3xl border-2 border-rose-200/80 shadow-2xl backdrop-blur-2xl">
                 {/* Golden Tape Accent */}
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-28 h-6 bg-amber-300/60 backdrop-blur-md rounded-sm border border-amber-300 rotate-1 shadow-sm flex items-center justify-center text-[10px] font-bold text-amber-900 uppercase tracking-widest">
-                  Forever 💖
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-36 h-6 bg-amber-300/70 backdrop-blur-md rounded-sm border border-amber-300 rotate-1 shadow-sm flex items-center justify-center text-[10px] font-bold text-amber-900 uppercase tracking-widest">
+                  {couplePhotos[activePhotoIdx].tag}
                 </div>
 
-                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-stone-200 shadow-inner">
-                  <Image
-                    src="/birthday/my/my_photo.jpg"
-                    alt="Our Cherished Moments Together"
-                    fill
-                    className="object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
-                    sizes="(max-width: 1024px) 100vw, 400px"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-stone-900/60 via-transparent to-transparent opacity-40" />
+                {/* Main Spotlight Photo */}
+                <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-stone-200 shadow-inner bg-stone-100">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={couplePhotos[activePhotoIdx].src}
+                      initial={{ opacity: 0, scale: 1.05 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.6 }}
+                      className="relative w-full h-full"
+                    >
+                      <Image
+                        src={couplePhotos[activePhotoIdx].src}
+                        alt={couplePhotos[activePhotoIdx].title}
+                        fill
+                        className="object-cover object-center"
+                        sizes="(max-width: 1024px) 100vw, 400px"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-stone-950/70 via-transparent to-transparent opacity-50" />
 
-                  {/* Photo Overlay Badge */}
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs px-3 py-2 rounded-xl bg-black/40 backdrop-blur-md border border-white/20">
-                    <span className="font-semibold tracking-wide">You &amp; Me Always</span>
-                    <span className="flex items-center gap-1 text-pink-300">
-                      <Heart className="w-3.5 h-3.5 fill-current" /> Together
-                    </span>
-                  </div>
+                      {/* Photo Overlay Badge */}
+                      <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs px-3 py-2 rounded-xl bg-black/40 backdrop-blur-md border border-white/20">
+                        <span className="font-semibold tracking-wide">
+                          {couplePhotos[activePhotoIdx].title}
+                        </span>
+                        <span className="flex items-center gap-1 text-pink-300 text-[11px]">
+                          <Heart className="w-3.5 h-3.5 fill-current" /> Together
+                        </span>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* Memory Filmstrip Thumbnails */}
+                <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                  {couplePhotos.map((photo, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActivePhotoIdx(idx)}
+                      className={`relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border-2 transition-all ${
+                        activePhotoIdx === idx
+                          ? "border-rose-500 scale-105 shadow-md ring-2 ring-rose-300"
+                          : "border-stone-200 opacity-60 hover:opacity-100"
+                      }`}
+                      title={photo.title}
+                    >
+                      <Image
+                        src={photo.src}
+                        alt={photo.title}
+                        fill
+                        className="object-cover object-top"
+                        sizes="48px"
+                      />
+                    </button>
+                  ))}
                 </div>
 
                 {/* Caption / Interactive Counter with Auto-Streaming Floating Hearts */}
-                <div className="mt-4 pt-3 border-t border-stone-100 flex items-center justify-between relative">
+                <div className="mt-3 pt-3 border-t border-stone-100 flex items-center justify-between relative">
                   <div>
-                    <p className="font-script text-2xl text-rose-600">Our Favorite Memory</p>
-                    <p className="text-[11px] text-stone-500">Auto-incrementing with love...</p>
+                    <p className="font-script text-2xl text-rose-600">Our Favorite Moments</p>
+                    <p className="text-[11px] text-stone-500">
+                      {couplePhotos[activePhotoIdx].caption}
+                    </p>
                   </div>
 
-                  <div className="relative">
+                  <div className="relative shrink-0 ml-2">
                     {/* Floating mini hearts from auto-stream */}
                     <AnimatePresence>
                       {floatingHearts.map((h) => (
@@ -223,7 +313,7 @@ export default function BoyfriendWishSection() {
 
                     <button
                       onClick={handleSendHeart}
-                      className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white transition-all text-xs font-bold border border-rose-200 hover:scale-105 active:scale-95 shadow-xs"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white transition-all text-xs font-bold border border-rose-200 hover:scale-105 active:scale-95 shadow-xs"
                       title="Tap for bonus kisses!"
                     >
                       <Heart className="w-3.5 h-3.5 fill-current animate-pulse text-rose-500 group-hover:text-white" />

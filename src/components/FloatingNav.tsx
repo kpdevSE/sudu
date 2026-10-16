@@ -21,6 +21,12 @@ export default function FloatingNav() {
       badge: "🌻",
     },
     {
+      id: "magical-wishes",
+      label: "Magic ✨",
+      icon: (active) => <Sparkles className={`w-5 h-5 transition-transform ${active ? "text-amber-500 scale-110" : "text-stone-600"}`} />,
+      badge: "✨",
+    },
+    {
       id: "my-wish",
       label: "My Love",
       icon: (active) => <Heart className={`w-5 h-5 transition-transform ${active ? "text-rose-600 fill-rose-600 scale-110" : "text-stone-600"}`} />,

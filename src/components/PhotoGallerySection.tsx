@@ -14,125 +14,30 @@ import {
   LayoutGrid,
   Film,
 } from "lucide-react";
-
-interface GalleryPhoto {
-  id: number;
-  src: string;
-  title: string;
-  category: "smiles" | "candids" | "specials";
-  caption: string;
-  tag: string;
-  featured?: boolean; // Spans 2 columns on mobile for dynamic bento look!
-  aspect?: string;
-  rotation?: string;
-}
+import { ALL_PHOTOS, PhotoItem } from "@/data/photos";
 
 export default function PhotoGallerySection() {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [viewMode, setViewMode] = useState<"mosaic" | "reel">("mosaic");
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
-  const [photoLikes, setPhotoLikes] = useState<Record<number, number>>({
-    1: 42,
-    2: 56,
-    3: 98,
-    4: 67,
-    5: 49,
-    6: 52,
-    7: 88,
-    8: 94,
+
+  // Initial adoration likes for all photos
+  const [photoLikes, setPhotoLikes] = useState<Record<string, number>>(() => {
+    const initial: Record<string, number> = {};
+    ALL_PHOTOS.forEach((p, idx) => {
+      initial[p.id] = 45 + ((idx * 7) % 55);
+    });
+    return initial;
   });
 
-  const photos: GalleryPhoto[] = [
-    {
-      id: 3,
-      src: "/birthday/home/birthday_main.jpg",
-      title: "The Lady in Red",
-      category: "specials",
-      caption: "The breathtaking queen of the day. A vision of beauty, grace, and confidence.",
-      tag: "Queen Energy 👑",
-      featured: true,
-      aspect: "aspect-[16/10]",
-      rotation: "rotate-0",
-    },
-    {
-      id: 1,
-      src: "/birthday/photogallery/imageone.jpg",
-      title: "Cozy Café Sunshine",
-      category: "smiles",
-      caption: "Sitting across from you, mesmerized by how effortlessly you light up the whole room.",
-      tag: "Pure Elegance ✨",
-      aspect: "aspect-[3/4]",
-      rotation: "-rotate-1",
-    },
-    {
-      id: 2,
-      src: "/birthday/photogallery/IMG-20230616-WA0067.jpg",
-      title: "Summer Breeze",
-      category: "candids",
-      caption: "The wind caught your hair and your sweet laughter made the entire afternoon magical.",
-      tag: "Sweet Vibes 🌻",
-      aspect: "aspect-[3/4]",
-      rotation: "rotate-1",
-    },
-    {
-      id: 4,
-      src: "/birthday/photogallery/IMG-20230616-WA0068.jpg",
-      title: "Radiant & Unfiltered",
-      category: "smiles",
-      caption: "Your natural, genuine smile that can instantly melt away any worry in the universe.",
-      tag: "Heart Melter 🌹",
-      aspect: "aspect-[4/5]",
-      rotation: "-rotate-1",
-    },
-    {
-      id: 5,
-      src: "/birthday/photogallery/IMG-20230616-WA0070.jpg",
-      title: "Golden Hour Glow",
-      category: "smiles",
-      caption: "When the evening light kissed your face and highlighted that gentle, gorgeous glow.",
-      tag: "Sunset Glow 🌅",
-      aspect: "aspect-[4/5]",
-      rotation: "rotate-1",
-    },
-    {
-      id: 8,
-      src: "/birthday/dad/dads_photo.jpg",
-      title: "Daddy's Pride & Joy",
-      category: "specials",
-      caption: "Feeding birthday cake to Dad—a moment of pure love and sacred blessings.",
-      tag: "Family Love ✝️",
-      featured: true,
-      aspect: "aspect-[16/10]",
-      rotation: "rotate-0",
-    },
-    {
-      id: 6,
-      src: "/birthday/photogallery/IMG-20230616-WA0071.jpg",
-      title: "Daydreaming",
-      category: "candids",
-      caption: "Lost in your own whimsical thoughts, effortlessly looking like a work of art.",
-      tag: "Dreamer 💭",
-      aspect: "aspect-[3/4]",
-      rotation: "-rotate-1",
-    },
-    {
-      id: 7,
-      src: "/birthday/photogallery/IMG-20230616-WA0072.jpg",
-      title: "Gentle Gaze",
-      category: "candids",
-      caption: "Eyes filled with stars, dreams, and endless kindness.",
-      tag: "Starry Eyes ⭐",
-      aspect: "aspect-[3/4]",
-      rotation: "rotate-1",
-    },
-  ];
+  const photos = ALL_PHOTOS;
 
   const filteredPhotos =
     activeCategory === "all"
       ? photos
       : photos.filter((p) => p.category === activeCategory);
 
-  const openLightbox = (id: number) => {
+  const openLightbox = (id: string) => {
     const idx = filteredPhotos.findIndex((p) => p.id === id);
     if (idx !== -1) setSelectedPhotoIndex(idx);
   };
@@ -165,7 +70,7 @@ export default function PhotoGallerySection() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedPhotoIndex, filteredPhotos.length]);
 
-  const likePhoto = (id: number, e: React.MouseEvent) => {
+  const likePhoto = (id: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setPhotoLikes((prev) => ({
       ...prev,
@@ -256,10 +161,11 @@ export default function PhotoGallerySection() {
             {/* Category Filter Pills */}
             <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
               {[
-                { id: "all", label: "All Moments" },
-                { id: "smiles", label: "Smiles ✨" },
-                { id: "candids", label: "Candids 📸" },
-                { id: "specials", label: "Highlights 💖" },
+                { id: "all", label: `All Memories (${photos.length})` },
+                { id: "beauty", label: "Sun-Kissed Sudu ✨" },
+                { id: "dates", label: "Romantic Dates 💑" },
+                { id: "fun", label: "Joy & Giggles 🤪" },
+                { id: "family", label: "Family & Blessings ✝️" },
               ].map((cat) => (
                 <button
                   key={cat.id}
@@ -312,21 +218,20 @@ export default function PhotoGallerySection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-5"
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4.5"
           >
             {filteredPhotos.map((photo) => (
               <motion.div
                 layout
                 key={photo.id}
                 onClick={() => openLightbox(photo.id)}
-                className={`relative group cursor-pointer rounded-2xl sm:rounded-3xl overflow-hidden bg-white border-2 border-stone-100 shadow-md hover:shadow-xl hover:border-rose-300 transition-all duration-300 ${
-                  photo.featured ? "col-span-2 aspect-[16/10] sm:aspect-[16/11]" : `${photo.aspect || "aspect-[3/4]"} col-span-1`
-                } ${photo.rotation || ""}`}
+                className="relative group cursor-pointer rounded-2xl sm:rounded-3xl overflow-hidden bg-white border-2 border-stone-100 shadow-md hover:shadow-xl hover:border-rose-300 transition-all duration-300 aspect-[3/4] col-span-1"
               >
-                {/* Golden Tape Accent on Featured Cards */}
+                {/* Highlight Badge */}
                 {photo.featured && (
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 z-20 px-3 py-0.5 bg-amber-300/80 backdrop-blur-md rounded-xs border border-amber-400 text-[9px] font-bold text-amber-950 uppercase tracking-widest shadow-xs">
-                    ⭐ Featured Highlight ⭐
+                  <div className="absolute top-2 right-10 z-10 px-2 py-0.5 bg-amber-400/90 backdrop-blur-md rounded-full border border-amber-300 text-[9px] font-bold text-amber-950 uppercase tracking-wider shadow-xs flex items-center gap-0.5">
+                    <span>⭐</span>
+                    <span className="hidden sm:inline">Highlight</span>
                   </div>
                 )}
 

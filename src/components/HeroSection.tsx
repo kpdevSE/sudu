@@ -96,7 +96,7 @@ export default function HeroSection() {
         ))}
       </div>
 
-      <div className="max-w-4xl mx-auto flex flex-col items-center text-center relative z-10 w-full">
+      <div className="max-w-6xl mx-auto flex flex-col items-center text-center relative z-10 w-full">
         {/* Catholic Blessing Badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -174,62 +174,160 @@ export default function HeroSection() {
           </p>
         </motion.div>
 
-        {/* Portrait with Golden Halo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.88 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.5, type: "spring", stiffness: 90 }}
-          className="relative group my-2 mb-9"
-        >
-          <div className="absolute -inset-4 sm:-inset-5 bg-gradient-to-r from-amber-300 via-rose-300 to-yellow-300 rounded-full blur-xl sm:blur-2xl opacity-60 group-hover:opacity-90 transition duration-700 animate-spin-slow" />
-          <div className="absolute -inset-1.5 bg-gradient-to-tr from-rose-400 via-amber-300 to-yellow-200 rounded-full opacity-75 blur-xs animate-pulse-glow" />
-
-          <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-84 md:h-84 rounded-full overflow-hidden p-2 sm:p-2.5 bg-gradient-to-tr from-amber-200 via-rose-200 to-yellow-100 shadow-2xl shadow-rose-950/15 border-4 border-white">
-            <div className="relative w-full h-full rounded-full overflow-hidden">
+        {/* Centerpiece Showcase: Flanked by Floating WhatsApp Memory Cards on Larger Screens */}
+        <div className="relative w-full max-w-4xl flex items-center justify-center my-3 mb-9">
+          {/* LEFT FLOATING POLAROID: WhatsApp Image (Hair in breeze over paddy fields) */}
+          <motion.div
+            initial={{ opacity: 0, x: -50, rotate: -8 }}
+            animate={{ opacity: 1, x: 0, rotate: -6 }}
+            transition={{ duration: 1, delay: 0.6 }}
+            whileHover={{ scale: 1.06, rotate: -3 }}
+            className="hidden lg:flex flex-col items-center absolute -left-6 xl:-left-12 top-6 z-20 w-44 bg-white/95 p-2.5 rounded-2xl border-2 border-teal-200/90 shadow-xl backdrop-blur-md"
+          >
+            {/* Tape Accent */}
+            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-teal-200/70 border border-teal-300 text-[9px] font-bold text-teal-900 uppercase rounded-xs shadow-xs">
+              Peaceful Fields 🌾
+            </div>
+            <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-stone-100 shadow-inner">
               <Image
-                src="/birthday/home/birthday_main.jpg"
-                alt="Birthday Queen Portrait"
+                src="/birthday/photogallery/WhatsApp Unknown 2026-10-16 at 10.47.39/WhatsApp Image 2026-10-16 at 10.46.16 (2).jpeg"
+                alt="Endless horizons"
                 fill
-                priority
-                className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
-                sizes="(max-width: 640px) 224px, (max-width: 768px) 288px, 336px"
+                className="object-cover object-center"
+                sizes="180px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-30 group-hover:opacity-10 transition-opacity duration-300" />
             </div>
-          </div>
-
-          {/* Floating Rose Badge */}
-          <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-2 -right-1 sm:right-2 glass-panel-warm px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-rose-300 shadow-lg flex items-center gap-2"
-          >
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-100 flex items-center justify-center text-rose-500">
-              <span className="text-sm">🌹</span>
-            </div>
-            <div className="text-left">
-              <p className="text-[9px] sm:text-[10px] text-stone-500 uppercase tracking-widest font-semibold">Special Day</p>
-              <p className="text-[11px] sm:text-xs font-bold text-stone-900">Forever Beautiful</p>
-            </div>
+            <p className="font-script text-sm text-teal-800 mt-1.5 font-bold">Endless Horizons 🌅</p>
           </motion.div>
 
-          {/* Floating Sunflower Badge */}
+          {/* RIGHT FLOATING POLAROID: WhatsApp Image (Couple walking together in white) */}
           <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            className="absolute -top-1 -left-1 sm:left-2 glass-panel-gold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-amber-300 shadow-lg flex items-center gap-2"
+            initial={{ opacity: 0, x: 50, rotate: 8 }}
+            animate={{ opacity: 1, x: 0, rotate: 6 }}
+            transition={{ duration: 1, delay: 0.7 }}
+            whileHover={{ scale: 1.06, rotate: 3 }}
+            className="hidden lg:flex flex-col items-center absolute -right-6 xl:-right-12 top-6 z-20 w-44 bg-white/95 p-2.5 rounded-2xl border-2 border-rose-200/90 shadow-xl backdrop-blur-md"
           >
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-              <span className="text-sm">🌻</span>
+            {/* Tape Accent */}
+            <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-rose-200/70 border border-rose-300 text-[9px] font-bold text-rose-900 uppercase rounded-xs shadow-xs">
+              Together Forever 💑
             </div>
-            <div className="text-left">
-              <p className="text-[9px] sm:text-[10px] text-amber-800 uppercase tracking-widest font-semibold">Our Blessing</p>
-              <p className="text-[11px] sm:text-xs font-bold text-stone-900">Pure Sunshine</p>
+            <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden bg-stone-100 shadow-inner">
+              <Image
+                src="/birthday/photogallery/WhatsApp Unknown 2026-10-16 at 10.47.39/WhatsApp Image 2026-10-16 at 10.46.46.jpeg"
+                alt="Couple sweet moments"
+                fill
+                className="object-cover object-top"
+                sizes="180px"
+              />
             </div>
+            <p className="font-script text-sm text-rose-700 mt-1.5 font-bold">Matching Smiles ✨</p>
           </motion.div>
-        </motion.div>
 
-        {/* Clean Action Buttons (No Confetti) */}
+          {/* MAIN QUEEN PORTRAIT with Golden Halo */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.5, type: "spring", stiffness: 90 }}
+            className="relative group z-10"
+          >
+            <div className="absolute -inset-4 sm:-inset-5 bg-gradient-to-r from-amber-300 via-rose-300 to-yellow-300 rounded-full blur-xl sm:blur-2xl opacity-60 group-hover:opacity-90 transition duration-700 animate-spin-slow" />
+            <div className="absolute -inset-1.5 bg-gradient-to-tr from-rose-400 via-amber-300 to-yellow-200 rounded-full opacity-75 blur-xs animate-pulse-glow" />
+
+            <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-84 md:h-84 rounded-full overflow-hidden p-2 sm:p-2.5 bg-gradient-to-tr from-amber-200 via-rose-200 to-yellow-100 shadow-2xl shadow-rose-950/15 border-4 border-white">
+              <div className="relative w-full h-full rounded-full overflow-hidden">
+                <Image
+                  src="/birthday/home/birthday_main.jpg"
+                  alt="Birthday Queen Portrait"
+                  fill
+                  priority
+                  className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                  sizes="(max-width: 640px) 224px, (max-width: 768px) 288px, 336px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-30 group-hover:opacity-10 transition-opacity duration-300" />
+              </div>
+            </div>
+
+            {/* Floating Rose Badge */}
+            <motion.div
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -bottom-2 -right-1 sm:right-2 glass-panel-warm px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-rose-300 shadow-lg flex items-center gap-2"
+            >
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-rose-100 flex items-center justify-center text-rose-500">
+                <span className="text-sm">🌹</span>
+              </div>
+              <div className="text-left">
+                <p className="text-[9px] sm:text-[10px] text-stone-500 uppercase tracking-widest font-semibold">Special Day</p>
+                <p className="text-[11px] sm:text-xs font-bold text-stone-900">Forever Beautiful</p>
+              </div>
+            </motion.div>
+
+            {/* Floating Sunflower Badge */}
+            <motion.div
+              animate={{ y: [0, 6, 0] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              className="absolute -top-1 -left-1 sm:left-2 glass-panel-gold px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-amber-300 shadow-lg flex items-center gap-2"
+            >
+              <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
+                <span className="text-sm">🌻</span>
+              </div>
+              <div className="text-left">
+                <p className="text-[9px] sm:text-[10px] text-amber-800 uppercase tracking-widest font-semibold">Our Blessing</p>
+                <p className="text-[11px] sm:text-xs font-bold text-stone-900">Pure Sunshine</p>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Mobile Mini Memory Bubble Row (Bringing WhatsApp photos immediately to mobile!) */}
+        <div className="flex lg:hidden items-center justify-center gap-3 mb-6 px-2">
+          {[
+            {
+              src: "/birthday/photogallery/WhatsApp Unknown 2026-10-16 at 10.47.39/WhatsApp Image 2026-10-16 at 10.46.15.jpeg",
+              title: "Sunlit Elegance ✨",
+              color: "border-rose-300",
+            },
+            {
+              src: "/birthday/photogallery/WhatsApp Unknown 2026-10-16 at 10.47.39/WhatsApp Image 2026-10-16 at 10.46.45.jpeg",
+              title: "Golden Hour 🌅",
+              color: "border-amber-300",
+            },
+            {
+              src: "/birthday/photogallery/WhatsApp Unknown 2026-10-16 at 10.47.39/WhatsApp Image 2026-10-16 at 10.46.48.jpeg",
+              title: "Giggles 🤪",
+              color: "border-yellow-300",
+            },
+            {
+              src: "/birthday/photogallery/WhatsApp Unknown 2026-10-16 at 10.47.39/WhatsApp Image 2026-10-16 at 10.46.49.jpeg",
+              title: "Café Date 🍔",
+              color: "border-pink-300",
+            },
+          ].map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.6 + idx * 0.1 }}
+              className={`flex flex-col items-center gap-1 p-1 rounded-2xl bg-white/90 border-2 ${item.color} shadow-sm`}
+            >
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-stone-100">
+                <Image
+                  src={item.src}
+                  alt={item.title}
+                  fill
+                  className="object-cover object-top"
+                  sizes="48px"
+                />
+              </div>
+              <span className="text-[9px] font-bold text-stone-700 truncate max-w-[60px]">
+                {item.title}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Clean Effortless Navigation Links */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -237,26 +335,26 @@ export default function HeroSection() {
           className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-lg px-2"
         >
           <a
-            href="#my-wish"
+            href="#magical-wishes"
             className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 text-white font-bold text-xs sm:text-sm shadow-xl shadow-rose-500/25 hover:shadow-rose-500/40 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
           >
             <Heart className="w-4 h-4 fill-current" />
-            <span>Read Birthday Wishes 💖</span>
-          </a>
-
-          <a
-            href="#dad-wish"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white hover:bg-stone-50 text-stone-800 font-semibold text-xs sm:text-sm border border-amber-200 shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
-          >
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <span>Dad&apos;s Letter 🎂</span>
+            <span>Discover Birthday Wishes ✨</span>
           </a>
 
           <a
             href="#gallery"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white hover:bg-stone-50 text-stone-800 font-semibold text-xs sm:text-sm border border-amber-200 shadow-md hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <span>All Photo Memories 📸</span>
+          </a>
+
+          <a
+            href="#my-wish"
             className="w-full sm:w-auto px-5 py-3.5 rounded-full glass-panel hover:bg-white text-stone-700 hover:text-stone-900 font-medium text-xs sm:text-sm transition-all hover:scale-105 border border-stone-200 shadow-sm flex items-center justify-center gap-1.5"
           >
-            <span>Memories</span>
+            <span>My Letter</span>
             <ArrowDown className="w-3.5 h-3.5 text-amber-600 animate-bounce" />
           </a>
         </motion.div>
